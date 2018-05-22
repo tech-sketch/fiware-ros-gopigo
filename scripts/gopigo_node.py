@@ -4,12 +4,16 @@
 import rospy
 
 from ros_gopigo.impl import Gopigo
+from ros_gopigo.logging import getLogger
+logger = getLogger(__name__)
 
 NODE_NAME = 'ros_gopigo'
 
 def main():
     try:
         rospy.init_node(NODE_NAME)
+        logger.infof('Start node : {}', NODE_NAME)
+
         gopigo = Gopigo(NODE_NAME)
         gopigo.start()
     except rospy.ROSInterruptException:
