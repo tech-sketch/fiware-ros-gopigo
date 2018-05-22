@@ -1,0 +1,4 @@
+<launch>
+  <node name="gopigo_node" pkg="ros_gopigo" type="gopigo_node.py" output="screen">
+  </node>
+</launch>
