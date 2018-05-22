@@ -36,5 +36,5 @@ class __Logger(object):
     def fatalf(self, msg, *args, **kwargs):
         self.__log('logfatal', msg, *args, **kwargs)
 
-def getLogger(name):
+def get_logger(name):
     return __Logger(name)

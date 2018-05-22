@@ -1,4 +1,6 @@
 <launch>
   <node name="gopigo_node" pkg="ros_gopigo" type="gopigo_node.py" output="screen">
+    <rosparam command="delete" param=""/>
+    <rosparam command="load" file="$(find ros_gopigo)/config/params.yaml"/>
   </node>
 </launch>

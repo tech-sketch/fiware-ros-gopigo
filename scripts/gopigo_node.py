@@ -4,8 +4,8 @@
 import rospy
 
 from ros_gopigo.impl import Gopigo
-from ros_gopigo.logging import getLogger
-logger = getLogger(__name__)
+from ros_gopigo.logging import get_logger
+logger = get_logger(__name__)
 
 NODE_NAME = 'ros_gopigo'
 
