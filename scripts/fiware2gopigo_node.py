@@ -3,19 +3,19 @@
 
 import rospy
 
-from ros_gopigo.gopigo_impl import Gopigo
+from ros_gopigo.fiware2gopigo_impl import Fiware2Gopigo
 from ros_gopigo.logging import get_logger
 logger = get_logger(__name__)
 
-NODE_NAME = 'ros_gopigo'
+NODE_NAME = 'fiware2gopigo'
 
 def main():
     try:
         rospy.init_node(NODE_NAME)
         logger.infof('Start node : {}', NODE_NAME)
 
-        gopigo = Gopigo(NODE_NAME)
-        gopigo.start()
+        node = Fiware2Gopigo(NODE_NAME)
+        node.connect().start()
     except rospy.ROSInterruptException:
         pass
 
