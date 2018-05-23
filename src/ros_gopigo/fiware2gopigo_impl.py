@@ -180,26 +180,27 @@ class Fiware2Gopigo(object):
 
     def __circle(self, ticks):
         move_cmd = Twist()
-        move_cmd.linear.x = 1.0
-        move_cmd.angular.z = 0.8
+        move_cmd.linear.x = self._params.ros.circle.x
+        move_cmd.angular.z = self._params.ros.circle.z
         self.__move(ticks * 2.0, move_cmd)
 
     def __linear(self, ticks, reverse=False):
         move_cmd = Twist()
-        linear_x = self._params.ros.linear.x
-        move_cmd.linear.x = 1.0 if not reverse else -1.0
+        linear = self._params.ros.linear
+        move_cmd.linear.x = linear if not reverse else -1.0 * linear
         self.__move(ticks, move_cmd)
 
     def __rotate(self, angle, reverse=False):
         move_cmd = Twist()
-        angular_z = self._params.ros.angular.z
-        move_cmd.angular.z = 0.8 if not reverse else 0.8
+        turn = self._params.ros.turn
+        move_cmd.linear.x = turn
+        move_cmd.angular.z = turn if not reverse else -1.0 * turn
         ticks = angle * self._params.ros.rate
         self.__move(ticks, move_cmd)
 
     def __move(self, ticks, move_cmd):
         r = rospy.Rate(self._params.ros.rate)
-        for t in range(int(ticks/ 8.0)):
+        for t in range(int(ticks)):
             if not self.__moving:
                 self.__ros_pub.publish(Twist())
                 break

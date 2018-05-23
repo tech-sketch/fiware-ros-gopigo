@@ -21,17 +21,7 @@ class Gopigo(object):
         logger.infof('Gopigo start: {}', self.node_name)
 
         rospy.Subscriber(find_item(self._params.ros.topics, 'key', 'gopigo').name, Twist, self._on_receive)
-        lwheel = rospy.Publisher(find_item(self._params.ros.topics, 'key', 'lwheel').name, Int16, queue_size=1)
-        rwheel = rospy.Publisher(find_item(self._params.ros.topics, 'key', 'rwheel').name, Int16, queue_size=1)
-
-        init_lwheel = enc_read(0)
-        init_rwheel = enc_read(1)
-
-        r = rospy.Rate(self._params.ros.rate)
-        while not rospy.is_shutdown():
-            lwheel.publish(Int16(enc_read(0) - init_lwheel))
-            rwheel.publish(Int16(enc_read(1) - init_rwheel))
-            r.sleep()
+        rospy.spin()
 
         motor1(0, 0)
         motor2(0, 0)
