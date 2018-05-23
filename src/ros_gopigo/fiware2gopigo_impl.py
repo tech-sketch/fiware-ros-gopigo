@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import ssl
 import threading
+from math import pi
 
 import paho.mqtt.client as mqtt
 
@@ -26,13 +28,14 @@ class Fiware2Gopigo(object):
         rospy.on_shutdown(self.__client.disconnect)
         rospy.on_shutdown(self.__client.loop_stop)
 
-        self.__ros_pub = rospy.Publisher(
-            find_item(self._params.ros.topics, 'key', 'gopigo').name,
-            Twist,
-            queue_size=10)
+        self.__ros_pub = rospy.Publisher(find_item(self._params.ros.topics, 'key', 'gopigo').name,
+                                         Twist,
+                                         queue_size=1)
         
         self.__moving = False
         self.__lock = threading.Lock()
+
+        self._cmd_payload_re = re.compile(find_item(self._params.mqtt.topics, 'key', 'fiware2gopigo').re)
 
     def connect(self):
         logger.infof('Connect to MQTT broker')
@@ -64,8 +67,142 @@ class Fiware2Gopigo(object):
     def _on_message(self, client, userdata, msg):
         payload = str(msg.payload)
         logger.infof('received message from mqtt: {}', payload)
+        matcher = self._cmd_payload_re.match(payload)
+        if matcher:
+            cmd = matcher.group('cmd')
+            device_id = matcher.group('device_id')
+            if cmd == 'circle':
+                self._do_circle()
+            elif cmd == 'square':
+                self._do_square()
+            elif cmd == 'triangle':
+                self._do_triangle()
+            elif cmd == 'cross':
+                self._do_stop()
+            elif cmd == 'up':
+                self._do_forward()
+            elif cmd == 'down':
+                self._do_backward()
+            elif cmd == 'left':
+                self._do_turnleft()
+            elif cmd == 'right':
+                self._do_turnright()
+            else:
+                logger.warnf('unknown cmd: {}', payload)
+                cmd = 'UNKNOWN CMD: {}'.format(cmd)
+            topic = find_item(self._params.mqtt.topics, 'key', 'fiware2gopigo_exec').name
+            fmt = find_item(self._params.mqtt.topics, 'key', 'fiware2gopigo_exec').format
+            self.__client.publish(topic, fmt.format(device_id=device_id, cmd=cmd))
+        else:
+            logger.warnf('unkown payload: {}', payload)
+        self.__ros_pub.publish(Twist())
+        logger.debugf('active threds = {}', threading.active_count())
 
     def _do_stop(self):
+        logger.infof('stop moving')
         with self.__lock:
             self.__moving = False
-        logger.debugf('sotp moving')
+        self.__ros_pub.publish(Twist())
+
+    def _do_circle(self):
+        logger.infof('do circle')
+        def move(self):
+            self.__circle(int(2 * pi * self._params.ros.rate))
+        return self._do_move(move)
+
+    def _do_square(self):
+        logger.infof('do square')
+        def move(self):
+            self.__linear(2 * self._params.ros.rate)
+            self.__rotate(pi / 2)
+            self.__linear(2 * self._params.ros.rate)
+            self.__rotate(pi / 2)
+            self.__linear(2 * self._params.ros.rate)
+            self.__rotate(pi / 2)
+            self.__linear(2 * self._params.ros.rate)
+            self.__rotate(pi / 2)
+        return self._do_move(move)
+
+    def _do_triangle(self):
+        logger.infof('do triangle')
+        def move(self):
+            self.__linear(2 * self._params.ros.rate)
+            self.__rotate(pi * 2 / 3)
+            self.__linear(2 * self._params.ros.rate)
+            self.__rotate(pi * 2 / 3)
+            self.__linear(2 * self._params.ros.rate)
+            self.__rotate(pi * 2 / 3)
+        return self._do_move(move)
+
+    def _do_forward(self):
+        logger.infof('do forward')
+        def move(self):
+            self.__linear(int(self._params.ros.rate * 0.4))
+        return self._do_move(move)
+
+    def _do_backward(self):
+        logger.infof('do backward')
+        def move(self):
+            self.__linear(int(self._params.ros.rate * 0.4), reverse=True)
+        return self._do_move(move)
+
+    def _do_turnleft(self):
+        logger.infof('do turn left')
+        def move(self):
+            self.__rotate(pi / 18)
+        return self._do_move(move)
+
+    def _do_turnright(self):
+        logger.infof('do turn right')
+        def move(self):
+            self.__rotate(pi / 18, reverse=True)
+        return self._do_move(move)
+
+    def _do_move(self, callback):
+        def func():
+            if not callable(callback):
+                return
+
+            if self.__moving:
+                logger.infof('now moving')
+                return
+
+            with self.__lock:
+                self.__moving = True
+
+            callback(self)
+
+            with self.__lock:
+                self.__moving = False
+        thread = threading.Thread(target=func)
+        thread.start()
+        return thread
+
+    def __circle(self, ticks):
+        move_cmd = Twist()
+        move_cmd.linear.x = 1.0
+        move_cmd.angular.z = 0.8
+        self.__move(ticks * 2.0, move_cmd)
+
+    def __linear(self, ticks, reverse=False):
+        move_cmd = Twist()
+        linear_x = self._params.ros.linear.x
+        move_cmd.linear.x = 1.0 if not reverse else -1.0
+        self.__move(ticks, move_cmd)
+
+    def __rotate(self, angle, reverse=False):
+        move_cmd = Twist()
+        angular_z = self._params.ros.angular.z
+        move_cmd.angular.z = 0.8 if not reverse else 0.8
+        ticks = angle * self._params.ros.rate
+        self.__move(ticks, move_cmd)
+
+    def __move(self, ticks, move_cmd):
+        r = rospy.Rate(self._params.ros.rate)
+        for t in range(int(ticks/ 8.0)):
+            if not self.__moving:
+                self.__ros_pub.publish(Twist())
+                break
+            self.__ros_pub.publish(move_cmd)
+            r.sleep()
+        self.__ros_pub.publish(Twist())

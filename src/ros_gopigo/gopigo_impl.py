@@ -39,7 +39,7 @@ class Gopigo(object):
         logger.infof('Gopigo stop: {}', self.node_name)
 
     def _on_receive(self, data):
-        logger.infof('received message: {}', data)
+        logger.debugf('received message: {}', data)
 
         t = data.linear.x
         r = data.angular.z
@@ -52,7 +52,7 @@ class Gopigo(object):
             motor1(0, 0)
             motor2(0, 0)
 
-            logger.infof('moter speed: {}', read_motor_speed())
+            logger.debugf('moter speed: {}', read_motor_speed())
             return
 
         logger.debugf('mag={}', mag)
@@ -77,4 +77,4 @@ class Gopigo(object):
         motor1(m1 >= 0, abs(int(m1 * 255)))
         motor2(m2 >= 0, abs(int(m2 * 255)))
 
-        logger.infof('moter speed: {}', read_motor_speed())
+        logger.debugf('moter speed: {}', read_motor_speed())
