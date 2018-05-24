@@ -1,9 +1,9 @@
 mqtt:
-  host: "192.168.0.1"
-  port: 1883
-  cafile: ""
-  username: ""
-  password: ""
+  host: "${MQTT_HOST}"
+  port: 8883
+  cafile: "/home/ubuntu/gopigo_ws/src/ros_gopigo/secrets/ca.crt"
+  username: "gopigo"
+  password: "${GOPIGO_PASSWORD}"
   topics:
     - key: "fiware2gopigo"
       name: "/demo1/gopigo/cmd"

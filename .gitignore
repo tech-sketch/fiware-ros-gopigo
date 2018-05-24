@@ -1,2 +1,3 @@
 *.py[co]
 config/params.yaml
+secrets/*
