@@ -2,15 +2,15 @@
 
 import math
 
-from gopigo import motor1, motor2, enc_read, read_motor_speed
+from gopigo import motor1, motor2, read_motor_speed
 
 import rospy
 from geometry_msgs.msg import Twist
-from std_msgs.msg import Int16
 
 from ros_gopigo.params import get_params, find_item
 from ros_gopigo.logging import get_logger
 logger = get_logger(__name__)
+
 
 class Gopigo(object):
     def __init__(self, node_name):

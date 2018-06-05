@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ros_gopigo</name>
-  <version>0.0.0</version>
-  <description>The ros_gopigo package</description>
+  <name>fiware-ros-gopigo</name>
+  <version>0.1.0</version>
+  <description>The fiware-ros-gopigo package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->

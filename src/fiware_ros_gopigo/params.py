@@ -3,6 +3,7 @@ from collections import namedtuple
 
 TYPE = 'ros_params'
 
+
 def __convert(obj):
     if isinstance(obj, dict):
         for key, value in obj.iteritems():
@@ -13,8 +14,10 @@ def __convert(obj):
     else:
         return obj
 
+
 def get_params(d):
     return __convert(d)
+
 
 def find_item(l, key_name, key_value):
     if not isinstance(l, list):

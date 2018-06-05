@@ -11,9 +11,10 @@ import paho.mqtt.client as mqtt
 import rospy
 from geometry_msgs.msg import Twist
 
-from ros_gopigo.params import get_params, find_item
-from ros_gopigo.logging import get_logger
+from fiware_ros_gopigo.params import get_params, find_item
+from fiware_ros_gopigo.logging import get_logger
 logger = get_logger(__name__)
+
 
 class Fiware2Gopigo(object):
     def __init__(self, node_name):
@@ -31,7 +32,7 @@ class Fiware2Gopigo(object):
         self.__ros_pub = rospy.Publisher(find_item(self._params.ros.topics, 'key', 'gopigo').name,
                                          Twist,
                                          queue_size=1)
-        
+
         self.__moving = False
         self.__lock = threading.Lock()
 
@@ -106,12 +107,14 @@ class Fiware2Gopigo(object):
 
     def _do_circle(self):
         logger.infof('do circle')
+
         def move(self):
             self.__circle(int(2 * pi * self._params.ros.rate))
         return self._do_move(move)
 
     def _do_square(self):
         logger.infof('do square')
+
         def move(self):
             self.__linear(2 * self._params.ros.rate)
             self.__rotate(pi / 2)
@@ -125,6 +128,7 @@ class Fiware2Gopigo(object):
 
     def _do_triangle(self):
         logger.infof('do triangle')
+
         def move(self):
             self.__linear(2 * self._params.ros.rate)
             self.__rotate(pi * 2 / 3)
@@ -136,24 +140,28 @@ class Fiware2Gopigo(object):
 
     def _do_forward(self):
         logger.infof('do forward')
+
         def move(self):
             self.__linear(int(self._params.ros.rate * 0.4))
         return self._do_move(move)
 
     def _do_backward(self):
         logger.infof('do backward')
+
         def move(self):
             self.__linear(int(self._params.ros.rate * 0.4), reverse=True)
         return self._do_move(move)
 
     def _do_turnleft(self):
         logger.infof('do turn left')
+
         def move(self):
             self.__rotate(pi / 18)
         return self._do_move(move)
 
     def _do_turnright(self):
         logger.infof('do turn right')
+
         def move(self):
             self.__rotate(pi / 18, reverse=True)
         return self._do_move(move)

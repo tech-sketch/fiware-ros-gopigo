@@ -1,0 +1,10 @@
+<launch>
+  <node name="gopigo_node" pkg="fiware-ros-gopigo" type="gopigo_node.py" output="screen">
+    <rosparam command="delete" param=""/>
+    <rosparam command="load" file="$(find fiware-ros-gopigo)/config/params.yaml"/>
+  </node>
+  <node name="fiware2gopigo_node" pkg="fiware-ros-gopigo" type="fiware2gopigo_node.py" output="screen">
+    <rosparam command="delete" param=""/>
+    <rosparam command="load" file="$(find fiware-ros-gopigo)/config/params.yaml"/>
+  </node>
+</launch>

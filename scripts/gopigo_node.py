@@ -3,11 +3,12 @@
 
 import rospy
 
-from ros_gopigo.gopigo_impl import Gopigo
-from ros_gopigo.logging import get_logger
+from fiware_ros_gopigo.gopigo_impl import Gopigo
+from fiware_ros_gopigo.logging import get_logger
 logger = get_logger(__name__)
 
 NODE_NAME = 'ros_gopigo'
+
 
 def main():
     try:
