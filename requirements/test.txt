@@ -1,0 +1,5 @@
+mock>=2.0
+ddt>=1.1
+freezegun>=0.3.10
+flake8>=3.5.0
+fake-rpi==0.6.0

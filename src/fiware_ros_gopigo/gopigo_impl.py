@@ -7,8 +7,8 @@ from gopigo import motor1, motor2, read_motor_speed
 import rospy
 from geometry_msgs.msg import Twist
 
-from ros_gopigo.params import get_params, find_item
-from ros_gopigo.logging import get_logger
+from fiware_ros_gopigo.params import get_params, find_item
+from fiware_ros_gopigo.logging import get_logger
 logger = get_logger(__name__)
 
 
