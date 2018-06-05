@@ -58,6 +58,11 @@ class TestGopigo(unittest.TestCase):
 
         node = Gopigo(node_name)
         self.assertEqual(node.node_name, node_name)
+        mocked_rospy.Subscriber.assert_called_once_with('/ros/topics/gopigo', Twist, node._on_receive)
+
+        mocked_motor1.assert_not_called()
+        mocked_motor2.assert_not_called()
+        mocked_read_motor_speed.assert_not_called()
 
     @patch('fiware_ros_gopigo.gopigo_impl.read_motor_speed')
     @patch('fiware_ros_gopigo.gopigo_impl.motor2')
@@ -67,13 +72,12 @@ class TestGopigo(unittest.TestCase):
         from fiware_ros_gopigo.gopigo_impl import Gopigo
 
         self.setMock(mocked_rospy)
-        node = Gopigo('foo')
-        node.start()
-        mocked_rospy.Subscriber.assert_called_once_with('/ros/topics/gopigo', Twist, node._on_receive)
+        Gopigo('foo').start()
         mocked_rospy.spin.assert_called_once_with()
 
         mocked_motor1.assert_called_once_with(False, 0)
         mocked_motor2.assert_called_once_with(False, 0)
+        mocked_read_motor_speed.assert_not_called()
 
     @patch('fiware_ros_gopigo.gopigo_impl.read_motor_speed')
     @patch('fiware_ros_gopigo.gopigo_impl.motor2')

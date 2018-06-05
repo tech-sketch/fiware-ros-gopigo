@@ -1,0 +1,24 @@
+mqtt:
+  host: "testhost"
+  port: 1883
+  topics:
+    - key: "fiware2gopigo"
+      name: "/demo1/gopigo/cmd"
+      re: "^(?P<device_id>.+)@move\\|(?P<cmd>.+)$"
+    - key: "fiware2gopigo_exec"
+      name: "/demo1/gopigo/cmdexe"
+      format: "{device_id}@move|executed {cmd}"
+ros:
+  rate: 20
+  linear: 0.4
+  turn: 0.4
+  circle:
+    x: 0.4
+    z: 0.3
+  topics:
+    - key: "gopigo"
+      name: "/cmd_vel"
+    - key: "lwheel"
+      name: "/lwheel"
+    - key: "rwheel"
+      name: "/rwheel"

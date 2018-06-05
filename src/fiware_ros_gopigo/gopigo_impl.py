@@ -16,11 +16,11 @@ class Gopigo(object):
     def __init__(self, node_name):
         self.node_name = node_name
         self._params = get_params(rospy.get_param('~'))
+        rospy.Subscriber(find_item(self._params.ros.topics, 'key', 'gopigo').name, Twist, self._on_receive)
 
     def start(self):
         logger.infof('Gopigo start: {}', self.node_name)
 
-        rospy.Subscriber(find_item(self._params.ros.topics, 'key', 'gopigo').name, Twist, self._on_receive)
         rospy.spin()
 
         motor1(0, 0)
