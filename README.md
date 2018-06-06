@@ -19,6 +19,9 @@ When receiving a `geometry_msgs/Twist` message from its topic, this node control
 ## Install libraries
 
 ```bash
+$ cd ~/gopigo_ws/src
+$ git clone https://github.com/tech-sketch/fiware-ros-gopigo.git
+$ cd fiware-ros-gopigo
 $ /bin/bash update_tools_for_ubuntu.sh
 $ pip install -r requirements/common.txt
 $ pip install -r requirements/gopigo.txt
@@ -28,8 +31,9 @@ $ pip install -r requirements/gopigo.txt
 1. ssh to gopigo and start `roscore`.
 
     ```bash
-    terminal1$ source devel/setup.bash
-    terminal1$ roscore
+    terminal1:$ cd ~/gopigo_ws
+    terminal1:$ source devel/setup.bash
+    terminal1:$ roscore
     ```
 1. configure `config/params.yaml`
 
@@ -38,8 +42,9 @@ $ pip install -r requirements/gopigo.txt
 1. ssh to gopigo and start `fiware-ros-turtlesim`.
 
     ```bash
-    terminal2$ source devel/setup.bash
-    terminal2$ roslaunch fiware-ros-gopigo fiware-ros-gopigo.launch
+    terminal2:$ cd ~/gopigo_ws
+    terminal2:$ source devel/setup.bash
+    terminal2:$ roslaunch fiware-ros-gopigo fiware-ros-gopigo.launch
     ```
 
 ## License
