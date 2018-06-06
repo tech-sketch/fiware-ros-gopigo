@@ -1,6 +1,8 @@
 # fiware-ros-gopigo
 This ros package acts as a bridge between [FIWARE](https://www.fiware.org) and [ROS](http://wiki.ros.org/) through MQTT.
 
+[![TravisCI Status](https://travis-ci.org/tech-sketch/fiware-ros-gopigo.svg?branch=master)](https://travis-ci.org/tech-sketch/fiware-ros-gopigo)
+
 ## Description
 ### `fiware2gopigo`
 This ROS node receives a command from [FIWARE orion context broker](https://catalogue-server.fiware.org/enablers/publishsubscribe-context-broker-orion-context-broker) through MQTT.
