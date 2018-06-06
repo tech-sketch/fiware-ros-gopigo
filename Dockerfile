@@ -1,6 +1,8 @@
 FROM ros:kinetic
 MAINTAINER Nobuyuki Matsui <nobuyuki.matsui@gmail.com>
 
+ARG additional="gopigo"
+
 RUN mv /bin/sh /bin/sh_tmp && ln -s /bin/bash /bin/sh
 
 RUN apt update && apt upgrade -y && \
@@ -17,7 +19,7 @@ RUN source /opt/ros/kinetic/setup.bash && \
     echo "source /opt/ws/devel/setup.bash" >> /root/.bashrc && \
     cd /opt/ws/src/fiware-ros-gopigo && \
     pip install -r ./requirements/common.txt && \
-    pip install RPi.GPIO
+    pip install -r ./requirements/${additional}.txt
 
 RUN rm /bin/sh && mv /bin/sh_tmp /bin/sh
 

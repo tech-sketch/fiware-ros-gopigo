@@ -1,0 +1,9 @@
+sudo: required
+language: python
+services:
+  - docker
+before_install:
+  - docker build --build-arg additional=test -t tech-sketch/fiware-ros-gopigo .
+script:
+  - docker run tech-sketch/fiware-ros-gopigo /bin/bash -c "catkin_make;source devel/setup.bash;flake8 src/fiware-ros-gopigo"
+  - docker run tech-sketch/fiware-ros-gopigo /bin/bash -c "catkin_make;source devel/setup.bash;catkin_make run_tests;catkin_test_results"
