@@ -6,7 +6,7 @@
     <rosparam command="load" file="$(find fiware-ros-gopigo)/config/test_params.yaml"/>
   </test>
   <node name="test_fiware2gopigo_node" pkg="fiware-ros-gopigo" type="test_fiware2gopigo_node.py" output="screen">
-    <rosparam command="load" file="$(find fiware-ros-gopigo)/config/params.yaml"/>
+    <rosparam command="load" file="$(find fiware-ros-gopigo)/config/test_params.yaml"/>
     <remap from="/cmd_vel" to="nodetest_topic"/>
   </node>
   <test test-name="pubtest" type="publishtest" pkg="rostest">
