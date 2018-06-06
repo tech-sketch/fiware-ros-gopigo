@@ -1,3 +1,4 @@
 *.py[co]
 config/params.yaml
 secrets/*
+!secrets/.gitkeep
