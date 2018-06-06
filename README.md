@@ -16,6 +16,14 @@ When receiving a `geometry_msgs/Twist` message from its topic, this node control
 
 **ROS kinetic**
 
+## Install libraries
+
+```bash
+$ /bin/bash update_tools_for_ubuntu.sh
+$ pip install -r requirements/common.txt
+$ pip install -r requirements/gopigo.txt
+```
+
 ## How to Run
 1. ssh to gopigo and start `roscore`.
 
